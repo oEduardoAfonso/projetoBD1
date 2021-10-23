@@ -14,6 +14,6 @@ class PerfilSchemaIn(ma.SQLAlchemySchema):
     class Meta:
         model = models.Perfil
 
-    cpf = fields.String(required=True, validate=validate.Length(min=1, max=11))
+    cpf = fields.String(required=True, validate=validate.Length(equal=11))
     nome = fields.String(required=True, validate=validate.Length(min=1, max=100))
     

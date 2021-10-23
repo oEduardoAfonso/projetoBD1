@@ -12,4 +12,4 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-from .views import perfil_view
+from .views import perfil_view, depoimento_view
