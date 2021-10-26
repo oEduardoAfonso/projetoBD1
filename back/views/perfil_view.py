@@ -21,8 +21,8 @@ class PerfilList(Resource):
         return make_response(jsonify('Imagem nao encontrada'), 404)
     
 class SalaDetail(Resource):
-    def get(self, cpf):
-        perfil = perfil_service.listar_perfil_cpf(cpf)
+    def get(self, usuario):
+        perfil = perfil_service.listar_perfil_usuario(usuario)
 
         if perfil is None:
             return make_response(jsonify('Perfil nao encontrado'), 404)
@@ -30,8 +30,8 @@ class SalaDetail(Resource):
         ps = perfil_schema.PerfilSchemaOut()
         return make_response(ps.jsonify(perfil), 200)
 
-    def put(self, cpf):
-        perfil_bd = perfil_service.listar_perfil_cpf(cpf)
+    def put(self, usuario):
+        perfil_bd = perfil_service.listar_perfil_usuario(usuario)
         if perfil_bd is None:
             return make_response(jsonify('Perfil nao encontrada'), 404)
 
@@ -40,11 +40,11 @@ class SalaDetail(Resource):
         perfil_service.editar_perfil(perfil_bd, perfil)
 
         psOut = perfil_schema.PerfilSchemaOut()
-        perfil_editado = perfil_service.listar_perfil_cpf(cpf)
+        perfil_editado = perfil_service.listar_perfil_usuario(usuario)
         return make_response(psOut.jsonify(perfil_editado), 200)
 
-    def delete(self, cpf):
-        perfil = perfil_service.listar_perfil_cpf(cpf)
+    def delete(self, usuario):
+        perfil = perfil_service.listar_perfil_usuario(usuario)
         if perfil is None:
             return make_response(jsonify('Perfil nao encontrada'), 404)
 
@@ -52,4 +52,4 @@ class SalaDetail(Resource):
         return make_response('', 204)
         
 api.add_resource(PerfilList, '/perfis')
-api.add_resource(SalaDetail, '/perfis/<string:cpf>')
+api.add_resource(SalaDetail, '/perfis/<string:usuario>')

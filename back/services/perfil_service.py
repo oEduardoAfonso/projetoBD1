@@ -9,7 +9,8 @@ def cadastrar_perfil(perfil):
     try:
         img = open('/home/edu/faculdade/5sem/bancos/projetoBD1/back/static/foto/foto.png', 'rb').read()
         perfil_novo = models.Perfil(
-            cpf=perfil['cpf'],
+            usuario=perfil['usuario'],
+            senha=perfil['senha'],
             nome=perfil['nome'],
             foto=img
             )
@@ -19,8 +20,8 @@ def cadastrar_perfil(perfil):
     db.session.commit()
     return perfil_novo
 
-def listar_perfil_cpf(cpf):
-    perfil = db.session.query(models.Perfil).filter_by(cpf=cpf).first()
+def listar_perfil_usuario(usuario):
+    perfil = db.session.query(models.Perfil).filter_by(usuario=usuario).first()
     return perfil
 
 def editar_perfil(perfil_bd, perfil):
