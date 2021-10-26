@@ -20,6 +20,10 @@ export default function Inicio() {
     const history = useHistory()
     const classes = useStyles()
 
+    React.useEffect(() => {
+        localStorage.removeItem('perfil')
+    }, [])
+
     function navigateToLogin() {
         history.push('/login')
     }

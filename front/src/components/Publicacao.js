@@ -11,7 +11,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Grid from '@mui/material/Grid';
 
 
-export default function Publicacao() {
+export default function Publicacao(props) {
 
   return (
     <Grid item xs={12}>
@@ -22,20 +22,18 @@ export default function Publicacao() {
               R
             </Avatar>
           }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={props.nome}
+          subheader={new Date(props.data).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to cook
-            together with your guests. Add 1 cup of frozen peas along with the mussels,
-            if you like.
+            {props.conteudo}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" sx={{ml: 'auto'}}>
             <FavoriteIcon />
-            12
+            {props.curtidas}
           </IconButton>
         </CardActions>
       </Card>

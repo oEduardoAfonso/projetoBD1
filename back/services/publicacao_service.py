@@ -22,6 +22,10 @@ def listar_publicacao_id(id):
     publicacao = db.session.query(models.Publicacao).filter_by(codigo=id).first()
     return publicacao
 
+def listar_publicacao_perfil(perfil):
+    publicacao = db.session.query(models.Publicacao).filter_by(autor=perfil).all()
+    return publicacao
+
 def editar_publicacao(publicacao_bd, publicacao):
     publicacao_new = models.Publicacao(
         conteudo=publicacao['conteudo']

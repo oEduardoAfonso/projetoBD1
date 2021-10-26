@@ -12,6 +12,7 @@ import Input from '@mui/material/Input';
 import Grid from '@mui/material/Grid';
 import SearchIcon from '@mui/icons-material/Search';
 import { makeStyles } from '@material-ui/styles';
+import api from "../services/Api";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +29,11 @@ export default function Base(props) {
     const [pesquisa, setPesquisa] = React.useState();
     const classes = useStyles()
     const isMenuOpen = Boolean(anchorEl);
+    const [perfil, setPerfil] = React.useState(null);
+
+    React.useEffect(() => {
+        api.get('/perfis/' + localStorage.getItem('perfil'), {}).then(response => { setPerfil(response.data) })
+    }, [])
 
     const ariaLabel = { 'aria-label': 'description' };
 
@@ -41,7 +47,7 @@ export default function Base(props) {
 
     function navigateToPerfil() {
         handleMenuClose()
-        history.push('/perfil')
+        history.push(`/perfil/${perfil.usuario}`)
     }
 
     function navigateToBegin() {
@@ -91,11 +97,11 @@ export default function Base(props) {
                     <Typography variant="h4" component="div" sx={{ flexGrow: 1 }} onClick={navigateToHomepage}>
                         Facekut
                     </Typography>
-                    <Box  sx={{ width: '40%', mr: 55 }}>
-                    <Input onChange={handlePesquisa} placeholder="Busque por amigos..." id="pesquisa" inputProps={ariaLabel} sx={{width: '80%', borderBottom: 1 }}/>
-                    <IconButton onClick={navigateToBusca} color="inherit">
-                        <SearchIcon />
-                    </IconButton>
+                    <Box sx={{ width: '40%', mr: 55 }}>
+                        <Input onChange={handlePesquisa} placeholder="Busque por amigos..." id="pesquisa" inputProps={ariaLabel} sx={{ width: '80%', borderBottom: 1 }} />
+                        <IconButton onClick={navigateToBusca} color="inherit">
+                            <SearchIcon />
+                        </IconButton>
                     </Box>
                     <IconButton
                         size="large"
@@ -112,16 +118,19 @@ export default function Base(props) {
                 </Toolbar>
             </AppBar>
             <Box sx={{
-                width: 800,
-                minHeight: 850,
-                ml: 70,
+                width: '100%',
                 mt: 2.5,
                 mb: 2.5,
-                borderRadius: 2,
-                border: 1,
-                borderColor: 'primary.dark'
+                display: 'flex',
+                justifyContent: 'center'
             }} className={classes.conteudo}>
-                <Grid conteiner >
+                <Grid conteiner sx={{
+                    width: 800,
+                    minHeight: 850,
+                    borderRadius: 2,
+                    border: 1,
+                    borderColor: 'primary.dark'
+                }}>
                     {children}
                 </Grid>
             </Box >

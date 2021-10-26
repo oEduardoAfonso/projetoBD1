@@ -58,6 +58,17 @@ class PublicacaoGostar(Resource):
         ps = publicacao_schema.PublicacaoSchemaOut()
         return make_response(ps.jsonify(publicacao), 200)
 
+class PublicacaoPerfil(Resource):
+    def get(self, perfil):
+        publicacao = publicacao_service.listar_publicacao_perfil(perfil)
+
+        if publicacao is None:
+            return make_response(jsonify('publicacao nao encontrado'), 404)
+
+        ps = publicacao_schema.PublicacaoSchemaOut(many=True)
+        return make_response(ps.jsonify(publicacao), 200)
+
 api.add_resource(PublicacaolList, '/publicacoes')
 api.add_resource(PublicacaoDetail, '/publicacoes/<int:id>')
+api.add_resource(PublicacaoPerfil, '/publicacoes/perfil/<string:perfil>')
 api.add_resource(PublicacaoGostar, '/publicacoes/gostar/<int:id>')

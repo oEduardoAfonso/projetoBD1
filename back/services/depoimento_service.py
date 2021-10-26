@@ -19,6 +19,10 @@ def listar_depoimento_id(id):
     depoimento = db.session.query(models.Depoimento).filter_by(codigo=id).first()
     return depoimento
 
+def listar_depoimento_perfil(perfil):
+    depoimentos = db.session.query(models.Depoimento).filter_by(perfil_recebeu=perfil).all()
+    return depoimentos
+
 def editar_depoimento(depoimento_bd, depoimento):
     depoimento_new = models.Depoimento(
         isaceito=depoimento['isaceito']

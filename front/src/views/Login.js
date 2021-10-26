@@ -39,19 +39,21 @@ export default function Login() {
     });
 
     const navigateToApp = async () => {
-        try{
-        const response = api.get('/perfis/' + values.usuario, {}).then(response => response.data.senha)
-        const senha = await response
-        
+        try {
+            const response = api.get('/perfis/' + values.usuario, {}).then(response => response.data.senha)
+            const senha = await response
 
-        if (senha == values.password)
-            history.push('/home')
-        else
-            setErro({...erros, senha: true})
+
+            if (senha == values.password) {
+                localStorage.setItem('perfil', values.usuario)
+                history.push('/home')
+            }
+            else
+                setErro({ ...erros, senha: true })
         }
-        catch(erro){
-            if(erro.response.status == 404)
-            setErro({ senha: true , usuario: true })
+        catch (erro) {
+            if (erro.response.status == 404)
+                setErro({ senha: true, usuario: true })
         }
     }
 
@@ -62,7 +64,7 @@ export default function Login() {
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
-        setErro({ senha: false , usuario: false })
+        setErro({ senha: false, usuario: false })
     };
 
     const handleClickShowPassword = () => {

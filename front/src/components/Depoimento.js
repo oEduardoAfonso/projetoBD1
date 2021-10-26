@@ -10,10 +10,30 @@ import { red } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import Grid from '@mui/material/Grid';
+import api from "../services/Api";
 
 
-export default function Depoimento() {
+export default function Depoimento(props) {
   const [pendente, setPendente] = React.useState('true')
+  const [perfilEnviou, setPerfilEnviou] = React.useState('')
+
+  React.useEffect(() => {
+    api.get('/perfis/' + props.perfil_enviou, {}).then(response => setPerfilEnviou(response.data.nome))
+  }, [])
+
+  function mostraOpcoes() {
+    if (localStorage.getItem('perfil') == props.perfil_recebeu && pendente) {
+      return (
+        <CardActions disableSpacing>
+          <IconButton aria-label="Recusar depoimento">
+            <ClearIcon />
+          </IconButton>
+          <IconButton aria-label="Aceitar depoimento" sx={{ ml: 'auto' }}>
+            <CheckIcon />
+          </IconButton>
+        </CardActions>)
+    }
+  }
 
   return (
     <Grid item xs={12}>
@@ -24,24 +44,14 @@ export default function Depoimento() {
               R
             </Avatar>
           }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={perfilEnviou}
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to cook
-            together with your guests. Add 1 cup of frozen peas along with the mussels,
-            if you like.
+            {props.conteudo}
           </Typography>
         </CardContent>
-        <CardActions disableSpacing sx={{display: {pendente}}}>
-          <IconButton aria-label="Recusar depoimento">
-            <ClearIcon />
-          </IconButton>
-          <IconButton aria-label="Aceitar depoimento" sx={{ml: 'auto'}}>
-            <CheckIcon />
-          </IconButton>
-        </CardActions>
+        {mostraOpcoes()}
       </Card>
     </Grid>
   );

@@ -47,6 +47,17 @@ class DepoimentoDetail(Resource):
 
         depoimento_service.deletar_depoimento(depoimento)
         return make_response('', 204)
+
+class DepoimentoPerfil(Resource):
+    def get(self, perfil):
+        depoimento = depoimento_service.listar_depoimento_perfil(perfil)
+
+        if depoimento is None:
+            return make_response(jsonify('Depoimento nao encontrado'), 404)
+
+        ps = depoimento_schema.DepoimentoSchema(many=True)
+        return make_response(ps.jsonify(depoimento), 200)
         
 api.add_resource(DepoimentolList, '/depoimentos')
 api.add_resource(DepoimentoDetail, '/depoimentos/<int:id>')
+api.add_resource(DepoimentoPerfil, '/depoimentos/perfil/<string:perfil>')

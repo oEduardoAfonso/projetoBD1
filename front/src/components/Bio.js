@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-export default function Bio() {
+export default function Bio(props) {
   return (
     <Card sx={{ width: '100%', boxShadow: 0, padding: 2 }}>
       <CardActionArea>
@@ -13,11 +13,11 @@ export default function Bio() {
           component="img"
           height="140"
           image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
+          alt="foto perfil"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Lizard
+            {props.nome}
           </Typography>
         </CardContent>
       </CardActionArea>
