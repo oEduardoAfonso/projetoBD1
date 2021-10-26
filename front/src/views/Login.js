@@ -12,6 +12,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import { makeStyles } from '@material-ui/styles';
 import { useHistory } from 'react-router-dom'
+import api from "../services/Api";
 
 const useStyles = makeStyles((theme) => ({
     conteudo: {
@@ -27,14 +28,33 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
     const history = useHistory()
     const classes = useStyles()
+    const [erros, setErro] = React.useState({
+        usuario: false,
+        senha: false,
+    });
     const [values, setValues] = React.useState({
+        usuario: '',
         password: '',
         showPassword: false,
     });
 
-    function navigateToApp() {
-        history.push('/home')
+    const navigateToApp = async () => {
+        try{
+        const response = api.get('/perfis/' + values.usuario, {}).then(response => response.data.senha)
+        const senha = await response
+        
+
+        if (senha == values.password)
+            history.push('/home')
+        else
+            setErro({...erros, senha: true})
+        }
+        catch(erro){
+            if(erro.response.status == 404)
+            setErro({ senha: true , usuario: true })
+        }
     }
+
 
     function navigateToHomepage() {
         history.push('/')
@@ -42,6 +62,7 @@ export default function Login() {
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
+        setErro({ senha: false , usuario: false })
     };
 
     const handleClickShowPassword = () => {
@@ -57,7 +78,13 @@ export default function Login() {
 
     return <Box className={classes.conteudo} component="form" sx={{ '& > :not(style)': { m: 1, width: '25ch' }, }} noValidate autoComplete="off">
         <Stack spacing={2} direction="column">
-            <TextField id="usuario" label="USUARIO" variant="outlined" />
+            <TextField
+                value={values.usuario}
+                onChange={handleChange('usuario')}
+                error={erros.usuario}
+                id="usuario"
+                label="USUARIO"
+                variant="outlined" />
             <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">SENHA</InputLabel>
                 <OutlinedInput
@@ -65,6 +92,7 @@ export default function Login() {
                     type={values.showPassword ? 'text' : 'password'}
                     value={values.password}
                     onChange={handleChange('password')}
+                    error={erros.senha}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
@@ -80,7 +108,7 @@ export default function Login() {
                     label="Senha"
                 />
             </FormControl>
-            <Button variant="contained" onClick={navigateToApp} type='submit'>LOGIN</Button>
+            <Button variant="contained" onClick={navigateToApp}>LOGIN</Button>
             <Button color='error' variant="outlined" onClick={navigateToHomepage}>CANCELAR</Button>
         </Stack>
     </Box>
