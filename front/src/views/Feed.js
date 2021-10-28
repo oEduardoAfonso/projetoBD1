@@ -46,7 +46,9 @@ export default function Feed() {
         const publi = posts.map(post => {
             return <Publicacao
                 nome={post.nome}
+                codigo={post.codigo}
                 data={post.data_hora}
+                autor={post.autor}
                 conteudo={post.conteudo}
                 curtidas={post.curtida_codigo_publicacao_fkey_perfil.length}
             />
