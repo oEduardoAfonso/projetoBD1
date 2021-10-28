@@ -14,21 +14,30 @@ import api from "../services/Api";
 
 
 export default function Depoimento(props) {
-  const [pendente, setPendente] = React.useState('true')
+  const [pendente, setPendente] = React.useState(!props.isaceito)
   const [perfilEnviou, setPerfilEnviou] = React.useState('')
+  const [visible, setVisible] = React.useState(true)
 
   React.useEffect(() => {
     api.get('/perfis/' + props.perfil_enviou, {}).then(response => setPerfilEnviou(response.data.nome))
   }, [])
 
+  const handleRecusa = () => {
+    api.delete('/depoimentos/' + props.codigo, {}).then(() => setVisible(false))
+  }
+
+  const handleAceita = () => {
+    api.put('/depoimentos/' + props.codigo, {isaceito: true}).then(() => setPendente(false))
+  }
+
   function mostraOpcoes() {
     if (localStorage.getItem('perfil') == props.perfil_recebeu && pendente) {
       return (
         <CardActions disableSpacing>
-          <IconButton aria-label="Recusar depoimento">
+          <IconButton aria-label="Recusar depoimento" onClick={handleRecusa}>
             <ClearIcon />
           </IconButton>
-          <IconButton aria-label="Aceitar depoimento" sx={{ ml: 'auto' }}>
+          <IconButton aria-label="Aceitar depoimento" onClick={handleAceita} sx={{ ml: 'auto' }}>
             <CheckIcon />
           </IconButton>
         </CardActions>)
@@ -37,7 +46,7 @@ export default function Depoimento(props) {
 
   return (
     <Grid item xs={12}>
-      <Card sx={{ margin: 2, bgcolor: '#bdbdbd', height: 'fit-content' }}>
+      <Card sx={{ margin: 2, bgcolor: '#bdbdbd', height: 'fit-content', display: visible? true : "none" }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

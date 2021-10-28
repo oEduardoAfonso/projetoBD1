@@ -8,7 +8,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { TextField } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import SendIcon from '@mui/icons-material/Send';
 import api from "../services/Api";
 
 export default function Feed() {
@@ -17,12 +20,14 @@ export default function Feed() {
     const [depoimentos, setDepoimentos] = React.useState();
     const [publicacoes, setPublicacoes] = React.useState();
     const [showPublicaoes, setShowPublicacoes] = React.useState(true);
+    const [conteudoDepoimento, setConteudoDepoimento] = React.useState('');
+    const [update, setUpdate] = React.useState(false);
 
     React.useEffect(() => {
         api.get('/perfil/' + nomePerfil, {}).then(response => { setPerfil(response.data) })
         api.get('/depoimentos/perfil/' + nomePerfil, {}).then(response => { setDepoimentos(response.data) })
         api.get('/publicacoes/perfil/' + nomePerfil, {}).then(response => { setPublicacoes(response.data) })
-    }, [])
+    }, [update])
 
     function showDepoimentos() {
         var posts = []
@@ -38,11 +43,17 @@ export default function Feed() {
         })
 
         const publi = posts.map(post => {
-            return <Depoimento
-                perfil_enviou={post.perfil_enviou}
-                perfil_recebeu={post.perfil_recebeu}
-                conteudo={post.conteudo}
-            />
+            if (!post.isaceito
+                && (post.perfil_enviou != localStorage.getItem('perfil')
+                    && post.perfil_recebeu != localStorage.getItem('perfil'))) return
+            else
+                return <Depoimento
+                    codigo={post.codigo}
+                    perfil_enviou={post.perfil_enviou}
+                    perfil_recebeu={post.perfil_recebeu}
+                    conteudo={post.conteudo}
+                    isaceito={post.isaceito}
+                />
         })
 
         return publi
@@ -75,6 +86,23 @@ export default function Feed() {
         return publi
     }
 
+    const handleChange = event => {
+        setConteudoDepoimento(event.target.value)
+    }
+
+    const publicar = () => {
+        const depoimento = {
+            conteudo: conteudoDepoimento,
+            perfil_enviou: localStorage.getItem('perfil'),
+            perfil_recebeu: nomePerfil
+        }
+
+        api.post('/depoimentos', depoimento).then(() => {
+            setConteudoDepoimento('')
+            setUpdate(!update)
+        })
+    }
+
 
     const seguir = () => {
         console.log(perfil)
@@ -102,6 +130,21 @@ export default function Feed() {
                     <Button color="inherit" onClick={() => setShowPublicacoes(false)}>Depoimentos</Button>
                 </Toolbar>
             </AppBar>
+        </Box>
+        <Box sx={{ display: perfil && !showPublicaoes ? "true" : "none" }}>
+            <TextField
+                multiline
+                id="depoimento"
+                value={conteudoDepoimento}
+                onChange={handleChange}
+                placeholder="Escreva um depoimento..."
+                variant="outlined"
+                sx={{ width: '100%', p: 2 }} />
+            <Box sx={{ display: 'flex' }}>
+                <IconButton color="primary" aria-label="upload picture" component="span" onClick={publicar} sx={{ ml: 'auto', mr: 2 }}>
+                    <SendIcon />
+                </IconButton>
+            </Box>
         </Box>
         {perfil && showPublicaoes ? showPublicacoes() : showDepoimentos()}
     </Base>
