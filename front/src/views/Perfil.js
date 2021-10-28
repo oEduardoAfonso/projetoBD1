@@ -25,11 +25,13 @@ export default function Feed() {
     const [conteudoDepoimento, setConteudoDepoimento] = React.useState('');
     const [update, setUpdate] = React.useState(false);
 
+    const isPerfil = localStorage.getItem('perfil') == nomePerfil
+
     React.useEffect(() => {
         api.get('/perfil/' + nomePerfil, {}).then(response => { setPerfil(response.data) })
         api.get('/depoimentos/perfil/' + nomePerfil, {}).then(response => { setDepoimentos(response.data) })
         api.get('/publicacoes/perfil/' + nomePerfil, {}).then(response => { setPublicacoes(response.data) })
-    }, [update])
+    }, [update, showPublicaoes])
 
     function showDepoimentos() {
         var posts = []
@@ -139,7 +141,7 @@ export default function Feed() {
                 </Toolbar>
             </AppBar>
         </Box>
-        <Box sx={{ display: perfil && !showPublicaoes ? "true" : "none" }}>
+        <Box sx={{ display: perfil && !showPublicaoes && !isPerfil ? "true" : "none" }}>
             <TextField
                 multiline
                 id="depoimento"

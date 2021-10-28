@@ -26,11 +26,14 @@ export default function Depoimento(props) {
   const [visible, setVisible] = React.useState(true)
   const [edit, setEdit] = React.useState(false)
 
+  const isAutor = localStorage.getItem('perfil') == props.perfil_enviou
+  const isPerfil = localStorage.getItem('perfil') == props.perfil_recebeu
+
   React.useEffect(() => {
     api.get('/perfil/' + props.perfil_enviou, {}).then(response => setPerfilEnviou(response.data.nome))
   }, [])
 
-  const handleRecusa = () => {
+  const handleDelete = () => {
     api.delete('/depoimentos/' + props.codigo, {}).then(() => setVisible(false))
   }
 
@@ -56,7 +59,7 @@ export default function Depoimento(props) {
     if (localStorage.getItem('perfil') == props.perfil_recebeu && pendente) {
       return (
         <CardActions disableSpacing>
-          <IconButton aria-label="Recusar depoimento" onClick={handleRecusa}>
+          <IconButton aria-label="Recusar depoimento" onClick={handleDelete}>
             <ClearIcon />
           </IconButton>
           <IconButton aria-label="Aceitar depoimento" onClick={handleAceita} sx={{ ml: 'auto' }}>
@@ -77,10 +80,10 @@ export default function Depoimento(props) {
           }
           title={perfilEnviou}
           action={<Box>
-            <IconButton color="inherit" onClick={handleEditar}>
+            <IconButton color="inherit" onClick={handleEditar} sx={{display: isAutor ? true : "none"}}>
               <CreateIcon />
             </IconButton>
-            <IconButton color="error" >
+            <IconButton color="error" onClick={handleDelete} sx={{display: isAutor || isPerfil ? true : "none"}}>
               <DeleteIcon />
             </IconButton>
           </Box>
