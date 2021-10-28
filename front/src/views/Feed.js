@@ -15,7 +15,7 @@ export default function Feed() {
     const [update, setUpdate] = React.useState(false);
 
     React.useEffect(() => {
-        api.get('/perfis/' + localStorage.getItem('perfil'), {}).then(response => {
+        api.get('/perfil/' + localStorage.getItem('perfil'), {}).then(response => {
             setPerfil(response.data)
             setPublicacoes([])
             response.data.amigos_perfil1_fkey_perfil.push(response.data.usuario)
@@ -24,7 +24,7 @@ export default function Feed() {
                     response.data.map(publicacao => {
                         if (publicacao.codigo_comunidade == null) {
                             async function getNome() {
-                                const resposta = api.get('/perfis/' + amigo, {}).then(response => response.data.nome)
+                                const resposta = api.get('/perfil/' + amigo, {}).then(response => response.data.nome)
                                 publicacao.nome = await resposta
                                 setPublicacoes(publicacoes => [...publicacoes, publicacao])
                             }
@@ -66,7 +66,7 @@ export default function Feed() {
             autor: perfil.usuario
         }
         api.post('/publicacoes', post).then(() => {
-            api.get('/perfis/' + perfil.usuario, {}).then(response => setPerfil(response.data))
+            api.get('/perfil/' + perfil.usuario, {}).then(response => setPerfil(response.data))
             setConteudo('')
             setUpdate(!update)
         })

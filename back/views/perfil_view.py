@@ -20,7 +20,7 @@ class PerfilList(Resource):
             return make_response(ps.jsonify(resultado), 200)
         return make_response(jsonify('Imagem nao encontrada'), 404)
     
-class SalaDetail(Resource):
+class PerfilDetail(Resource):
     def get(self, usuario):
         perfil = perfil_service.listar_perfil_usuario(usuario)
 
@@ -50,6 +50,17 @@ class SalaDetail(Resource):
 
         perfil_service.deletar_perfil(perfil)
         return make_response('', 204)
+
+class PerfilDetails(Resource):
+    def get(self, usuario):
+        perfil = perfil_service.listar_perfil_usuarios(usuario)
+
+        if perfil is None:
+            return make_response(jsonify('Perfil nao encontrado'), 404)
+
+        ps = perfil_schema.PerfilSchemaOut(many=True)
+        return make_response(ps.jsonify(perfil), 200)
         
 api.add_resource(PerfilList, '/perfis')
-api.add_resource(SalaDetail, '/perfis/<string:usuario>')
+api.add_resource(PerfilDetail, '/perfil/<string:usuario>')
+api.add_resource(PerfilDetails, '/perfis/<string:usuario>')

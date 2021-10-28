@@ -40,7 +40,7 @@ export default function Login() {
 
     const navigateToApp = async () => {
         try {
-            const response = api.get('/perfis/' + values.usuario, {}).then(response => response.data.senha)
+            const response = api.get('/perfil/' + values.usuario, {}).then(response => response.data.senha)
             const senha = await response
 
 

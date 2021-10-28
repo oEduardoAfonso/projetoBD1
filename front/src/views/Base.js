@@ -32,7 +32,7 @@ export default function Base(props) {
     const [perfil, setPerfil] = React.useState(null);
 
     React.useEffect(() => {
-        api.get('/perfis/' + localStorage.getItem('perfil'), {}).then(response => { setPerfil(response.data) })
+        api.get('/perfil/' + localStorage.getItem('perfil'), {}).then(response => { setPerfil(response.data) })
     }, [])
 
     const ariaLabel = { 'aria-label': 'description' };

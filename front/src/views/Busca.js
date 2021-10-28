@@ -6,20 +6,33 @@ import SendIcon from '@mui/icons-material/Send';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
-
+import api from "../services/Api";
 
 export default function Feed() {
     const { nomePerfil } = useParams();
-    function perfis() {
-        var posts = []
-        for (var aux = 0; aux < 10; aux++)
-            posts.push(<PerfilCard />)
-        return posts
-    }
+    const [resultados, setResultados] = React.useState(null);
+    const [perfis, setPerfis] = React.useState([]);
 
-    const publicar = () => {
-        console.log('publicado')
-    }
+    React.useEffect(() => {
+        api.get('/perfis/' + nomePerfil, {}).then(response => {
+            setResultados(response.data)
+        })
+    }, [nomePerfil])
+
+    React.useEffect(() => {
+        setPerfis([])
+        if (resultados) {
+            resultados.map(usuario => {
+                if (usuario.usuario != localStorage.getItem('perfil'))
+                    setPerfis(perfis =>
+                        [...perfis,
+                        <PerfilCard
+                            perfil={usuario.perfil}
+                            nome={usuario.nome}
+                        />])
+            })
+        }
+    }, [resultados])
 
     return <Base>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -27,6 +40,6 @@ export default function Feed() {
                 Resultados da busca "{nomePerfil}"
             </Typography>
         </Box>
-        {perfis()}
+        {perfis}
     </Base>
 }

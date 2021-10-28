@@ -9,9 +9,14 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
+import { useHistory } from 'react-router-dom'
 
+export default function PerfilCard(props) {
+  const history = useHistory()
 
-export default function PerfilCard() {
+  const handleClick = () => {
+      history.push('/perfil/' + props.perfil)
+  }
 
   return (
     <Grid item xs={12} sx={{ ml: 5 }}>
@@ -22,10 +27,9 @@ export default function PerfilCard() {
               R
             </Avatar>
           }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={props.nome}
           action={
-            <IconButton aria-label="adicionar amigo" component="span"  sx={{ ml: 'auto', mr: 2 }}>
+            <IconButton aria-label="adicionar amigo" onClick={handleClick} component="span"  sx={{ ml: 'auto', mr: 2 }}>
               <AddIcon />
             </IconButton>}
         />

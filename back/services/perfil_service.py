@@ -1,5 +1,6 @@
 from ..models import models
 from back import db
+from sqlalchemy.sql import text
 
 def listar_perfis():
     perfis = db.session.query(models.Perfil).all()
@@ -22,6 +23,12 @@ def cadastrar_perfil(perfil):
 
 def listar_perfil_usuario(usuario):
     perfil = db.session.query(models.Perfil).filter_by(usuario=usuario).first()
+    return perfil
+
+def listar_perfil_usuarios(usuario):
+    search = text(f"UPPER(nome) LIKE UPPER(\'%{usuario}%\')")
+    print(search)
+    perfil = db.session.query(models.Perfil).filter(search).all()
     return perfil
 
 def editar_perfil(perfil_bd, perfil):

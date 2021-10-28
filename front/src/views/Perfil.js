@@ -19,7 +19,7 @@ export default function Feed() {
     const [showPublicaoes, setShowPublicacoes] = React.useState(true);
 
     React.useEffect(() => {
-        api.get('/perfis/' + nomePerfil, {}).then(response => { setPerfil(response.data) })
+        api.get('/perfil/' + nomePerfil, {}).then(response => { setPerfil(response.data) })
         api.get('/depoimentos/perfil/' + nomePerfil, {}).then(response => { setDepoimentos(response.data) })
         api.get('/publicacoes/perfil/' + nomePerfil, {}).then(response => { setPublicacoes(response.data) })
     }, [])
