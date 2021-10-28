@@ -13,16 +13,21 @@ import Grid from '@mui/material/Grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import Box from '@mui/material/Box';
+import SendIcon from '@mui/icons-material/Send';
+import { TextField } from '@mui/material';
 import api from "../services/Api";
 
 
 export default function Depoimento(props) {
   const [pendente, setPendente] = React.useState(!props.isaceito)
   const [perfilEnviou, setPerfilEnviou] = React.useState('')
+  const [conteudo, setConteudo] = React.useState(props.conteudo)
+  const [conteudoEditado, setConteudoEditado] = React.useState(props.conteudo)
   const [visible, setVisible] = React.useState(true)
+  const [edit, setEdit] = React.useState(false)
 
   React.useEffect(() => {
-    api.get('/perfis/' + props.perfil_enviou, {}).then(response => setPerfilEnviou(response.data.nome))
+    api.get('/perfil/' + props.perfil_enviou, {}).then(response => setPerfilEnviou(response.data.nome))
   }, [])
 
   const handleRecusa = () => {
@@ -31,6 +36,20 @@ export default function Depoimento(props) {
 
   const handleAceita = () => {
     api.put('/depoimentos/' + props.codigo, { isaceito: true }).then(() => setPendente(false))
+  }
+
+  const handleEditar = () => {
+    setEdit(!edit)
+    setConteudoEditado(conteudo)
+  }
+
+  const handleChange = event => {
+    setConteudoEditado(event.target.value)
+  }
+
+  const handleSubmit = () => {
+    api.put('/depoimentos/' + props.codigo, { conteudo: conteudoEditado }).then(() => setConteudo(conteudoEditado))
+    setEdit(!edit)
   }
 
   function mostraOpcoes() {
@@ -58,7 +77,7 @@ export default function Depoimento(props) {
           }
           title={perfilEnviou}
           action={<Box>
-            <IconButton color="inherit" >
+            <IconButton color="inherit" onClick={handleEditar}>
               <CreateIcon />
             </IconButton>
             <IconButton color="error" >
@@ -69,9 +88,29 @@ export default function Depoimento(props) {
         />
 
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            {props.conteudo}
+          <Typography variant="body2" color="text.secondary" sx={{ display: edit ? "none" : true }}>
+            {conteudo}
           </Typography>
+          <Box sx={{ display: edit ? true : "none" }}>
+            <TextField
+            multiline
+            id="publicacao"
+            value={conteudoEditado}
+            placeholder={conteudo}
+            variant="outlined"
+            onChange={handleChange}
+            sx={{ width: '100%', p: 2 }} />
+            <Box sx={{ display: 'flex' }}>
+              <IconButton
+              color="primary"
+              onClick={handleSubmit}
+              aria-label="upload picture"
+              component="span"
+              sx={{ ml: 'auto', mr: 2 }}>
+                <SendIcon />
+              </IconButton>
+            </Box>
+          </Box>
         </CardContent>
         {mostraOpcoes()}
       </Card>

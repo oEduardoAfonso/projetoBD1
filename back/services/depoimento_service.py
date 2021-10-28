@@ -25,10 +25,14 @@ def listar_depoimento_perfil(perfil):
 
 def editar_depoimento(depoimento_bd, depoimento):
     depoimento_new = models.Depoimento(
-        isaceito=depoimento['isaceito']
+        isaceito=depoimento['isaceito'],
+        conteudo=depoimento['conteudo']
         )
 
-    depoimento_bd.isaceito = depoimento_new.isaceito
+    if depoimento_new.isaceito is not None:
+        depoimento_bd.isaceito = depoimento_new.isaceito
+    if depoimento_new.conteudo is not None:
+        depoimento_bd.conteudo = depoimento_new.conteudo
     db.session.commit()
 
 def deletar_depoimento(depoimento):
