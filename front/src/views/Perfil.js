@@ -12,6 +12,8 @@ import { TextField } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ImageIcon from '@mui/icons-material/Image';
 import api from "../services/Api";
 
 export default function Feed() {
@@ -116,7 +118,13 @@ export default function Feed() {
                     <Bio nome={perfil ? perfil.nome : null} />
                 </Grid>
                 <Grid item xs={4}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Box sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'space-around', alignItems: 'center', height: '100%' }}>
+                        <IconButton color="error" >
+                            <DeleteIcon />
+                        </IconButton>
+                        <IconButton color="inherit" >
+                            <ImageIcon />
+                        </IconButton>
                         {perfil && true ? `${perfil.amigos_perfil2_fkey_perfil.length} seguidores` : <Button variant="outlined" onClick={seguir}>SEGUIR</Button>}
 
                     </Box>

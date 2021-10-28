@@ -10,6 +10,9 @@ import { red } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import Grid from '@mui/material/Grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
+import Box from '@mui/material/Box';
 import api from "../services/Api";
 
 
@@ -27,7 +30,7 @@ export default function Depoimento(props) {
   }
 
   const handleAceita = () => {
-    api.put('/depoimentos/' + props.codigo, {isaceito: true}).then(() => setPendente(false))
+    api.put('/depoimentos/' + props.codigo, { isaceito: true }).then(() => setPendente(false))
   }
 
   function mostraOpcoes() {
@@ -46,7 +49,7 @@ export default function Depoimento(props) {
 
   return (
     <Grid item xs={12}>
-      <Card sx={{ margin: 2, bgcolor: '#bdbdbd', height: 'fit-content', display: visible? true : "none" }}>
+      <Card sx={{ margin: 2, bgcolor: '#bdbdbd', height: 'fit-content', display: visible ? true : "none" }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -54,7 +57,17 @@ export default function Depoimento(props) {
             </Avatar>
           }
           title={perfilEnviou}
+          action={<Box>
+            <IconButton color="inherit" >
+              <CreateIcon />
+            </IconButton>
+            <IconButton color="error" >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+          }
         />
+
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             {props.conteudo}

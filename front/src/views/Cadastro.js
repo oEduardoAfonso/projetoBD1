@@ -35,10 +35,6 @@ export default function Cadastro() {
         showPassword: false,
     });
 
-    function navigateToLogin() {
-        history.push('/login')
-    }
-
     function navigateToHomepage() {
         history.push('/')
     }

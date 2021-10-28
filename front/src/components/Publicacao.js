@@ -9,6 +9,9 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Grid from '@mui/material/Grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
+import Box from '@mui/material/Box';
 
 
 export default function Publicacao(props) {
@@ -23,7 +26,16 @@ export default function Publicacao(props) {
             </Avatar>
           }
           title={props.nome}
-          subheader={new Date(props.data).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+          subheader={new Date(props.data).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+          action={<Box>
+            <IconButton color="inherit" >
+              <CreateIcon />
+            </IconButton>
+            <IconButton color="error" >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+          }
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
@@ -31,7 +43,7 @@ export default function Publicacao(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites" sx={{ml: 'auto'}}>
+          <IconButton aria-label="add to favorites" sx={{ ml: 'auto' }}>
             <FavoriteIcon />
             {props.curtidas}
           </IconButton>
