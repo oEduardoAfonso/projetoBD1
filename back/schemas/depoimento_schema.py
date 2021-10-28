@@ -9,5 +9,5 @@ class DepoimentoSchema(ma.SQLAlchemySchema):
     codigo = fields.Integer()
     conteudo = fields.String(validate=validate.Length(min=1, max=100))
     isaceito = fields.Boolean(allow_none=True, missing=False)
-    perfil_enviou = fields.String(validate=validate.Length(equal=11))
-    perfil_recebeu = fields.String(validate=validate.Length(equal=11))
+    perfil_enviou = fields.String()
+    perfil_recebeu = fields.String()

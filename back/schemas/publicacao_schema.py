@@ -17,6 +17,6 @@ class PublicacaoSchemaIn(ma.SQLAlchemyAutoSchema):
 
     codigo = fields.Integer()
     codigo_comunidade = fields.Integer(missing=None)
-    autor = fields.String(validate=validate.Length(equal=11))
+    autor = fields.String()
     conteudo = fields.String(validate=validate.Length(min=1, max=250))
     data_hora = fields.DateTime()
