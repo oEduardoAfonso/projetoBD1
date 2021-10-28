@@ -11,7 +11,8 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import { makeStyles } from '@material-ui/styles';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import api from "../services/Api";
 
 const useStyles = makeStyles((theme) => ({
     conteudo: {
@@ -29,6 +30,8 @@ export default function Cadastro() {
     const classes = useStyles()
     const [values, setValues] = React.useState({
         password: '',
+        usuario: '',
+        nome: '',
         showPassword: false,
     });
 
@@ -55,10 +58,22 @@ export default function Cadastro() {
         event.preventDefault();
     };
 
+    const handleSubmit = event => {
+        event.preventDefault();
+        const perfil = {
+            usuario: values.usuario,
+            nome: values.nome,
+            senha: values.password
+        }
+
+        api.post('/perfis', perfil)
+        navigateToHomepage()
+    }
+
     return <Box className={classes.conteudo} component="form" sx={{ '& > :not(style)': { m: 1, width: '25ch' }, }} noValidate autoComplete="off">
         <Stack spacing={2} direction="column">
-            <TextField id="usuario" label="USUARIO" variant="outlined" />
-            <TextField id="nome" label="NOME" variant="outlined" />
+            <TextField id="usuario" value={values.usuario} onChange={handleChange('usuario')} label="USUARIO" variant="outlined" />
+            <TextField id="nome" value={values.nome} onChange={handleChange('nome')} label="NOME" variant="outlined" />
             <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">SENHA</InputLabel>
                 <OutlinedInput
@@ -81,7 +96,7 @@ export default function Cadastro() {
                     label="Senha"
                 />
             </FormControl>
-            <Button variant="contained" onClick={navigateToLogin} type='submit'>CONCLUIR</Button>
+            <Button variant="contained" onClick={handleSubmit} type='submit'>CONCLUIR</Button>
             <Button color='error' variant="outlined" onClick={navigateToHomepage}>CANCELAR</Button>
         </Stack>
     </Box>
